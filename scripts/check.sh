@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Format and test the code
 # Run chmod +x scripts/check.sh when first using to make it executable
 set -e
