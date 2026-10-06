@@ -1,9 +1,19 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 from blasto.utils import capitalize_name
 
 app = FastAPI()
+
+
+@app.get("/", response_class=HTMLResponse)
+async def index() -> str:
+    return """<!doctype html>
+<html>
+  <head><title>BLASTO</title></head>
+  <body><h1>Салам, БРАТИШШШКА!</h1></body>
+</html>"""
 
 
 @app.get("/health")
