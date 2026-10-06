@@ -6,7 +6,7 @@ def test_index_returns_html(client: TestClient) -> None:
     response = client.get("/")
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/html")
-    assert "Hello, World!" in response.text
+    assert "Салам, БРАТИШШШКА!" in response.text
 
 
 def test_health(client: TestClient) -> None:
