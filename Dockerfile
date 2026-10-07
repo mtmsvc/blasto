@@ -38,4 +38,4 @@ RUN useradd --create-home app
 # Switch to the "app" user, so from now on everything runs as "app"
 USER app
 
-CMD ["uvicorn", "blasto.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "blasto.main:app", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
