@@ -46,10 +46,14 @@ async def log_requests(
 @app.get("/", response_class=HTMLResponse)
 async def index() -> str:
     return """<!doctype html>
-<html>
-  <head><title>BLASTO</title></head>
-  <body><h1>Салам, БРАТИШШШКА!</h1></body>
-</html>"""
+    <html>
+      <head><title>blasto</title></head>
+      <body>
+        <h1>blasto</h1>
+        <p>Backend for a driving school's website, in development.</p>
+        <p>Code: <a href="https://github.com/mtmsvc/blasto">github.com/mtmsvc/blasto</a></p>
+      </body>
+    </html>"""
 
 
 @app.get("/health")
