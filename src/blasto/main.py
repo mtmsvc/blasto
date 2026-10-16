@@ -10,6 +10,7 @@ from fastapi import (
 )
 from fastapi.responses import HTMLResponse
 
+from blasto.api.routes import applications
 from blasto.config import settings
 from blasto.logging_setup import setup_logging
 from blasto.utils import capitalize_name
@@ -21,6 +22,8 @@ logger = logging.getLogger(
 
 
 app = FastAPI()
+
+app.include_router(applications.router)
 
 
 @app.middleware("http")  # run this function around every HTTP request
