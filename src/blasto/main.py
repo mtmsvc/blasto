@@ -14,7 +14,6 @@ from blasto.api.routes import applications
 from blasto.config import settings
 from blasto.errors import BlastoError
 from blasto.logging_setup import setup_logging
-from blasto.utils import capitalize_name
 
 setup_logging(settings.log_level)  # configure logging before anything logs
 logger = logging.getLogger(
@@ -73,12 +72,6 @@ async def index() -> str:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
-
-
-@app.get("/hello/{name}")
-def hello(name: str) -> dict[str, str]:
-    name = capitalize_name(name)
-    return {"message": f"Hello, {name}!"}
 
 
 if __name__ == "__main__":

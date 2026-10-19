@@ -25,6 +25,7 @@ dev = [
     "httpx2>=2.13.1",
     "mypy>=2.4.0",
     "pytest>=9.1.1",
+    "pytest-env>=1.8.1",
     "ruff>=0.16.10",
 ]
 
@@ -33,3 +34,7 @@ lint.extend-select = ["I"]
 
 [tool.mypy]
 strict = true
+
+[tool.pytest_env]
+DATABASE_URL = {value = "postgresql+asyncpg://blasto:blasto@localhost:5432/blasto_test", skip_if_set = true}
+ADMIN_API_KEY = "test-admin-key"

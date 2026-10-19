@@ -20,7 +20,7 @@ class Settings(
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = (
         "INFO"  # LOG_LEVEL: how much to log
     )
-    database_url: str = "postgresql+asyncpg://blasto:blasto@localhost:5432/blasto"  # DATABASE_URL: used in S7; local default
+    database_url: str = "postgresql+asyncpg://blasto:blasto@localhost:5432/blasto"
     admin_api_key: SecretStr | None = (
         None  # ADMIN_API_KEY; SecretStr hides the value in logs and error messages
     )
