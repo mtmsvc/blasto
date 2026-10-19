@@ -10,6 +10,20 @@ jobs:
   checks:
     name: checks
     runs-on: ubuntu-latest
+    services:
+      postgres:                         # the service's name in this job
+        image: postgres:17              # same version as locally
+        env:                            # settings the Postgres image reads on first start
+          POSTGRES_USER: blasto
+          POSTGRES_PASSWORD: blasto     # fine: a throwaway database that exists only during this job
+          POSTGRES_DB: blasto_test      # the database your tests expect
+        ports:
+          - 5432:5432                   # reachable from the job's steps as localhost:5432
+        options: >-                     # wait until Postgres accepts connections before running the steps
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
           - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
