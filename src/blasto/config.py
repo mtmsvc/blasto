@@ -1,5 +1,6 @@
 from typing import Literal
 
+from pydantic import SecretStr
 from pydantic_settings import (
     BaseSettings,
     SettingsConfigDict,
@@ -20,6 +21,9 @@ class Settings(
         "INFO"  # LOG_LEVEL: how much to log
     )
     database_url: str = "postgresql+asyncpg://blasto:blasto@localhost:5432/blasto"  # DATABASE_URL: used in S7; local default
+    admin_api_key: SecretStr | None = (
+        None  # ADMIN_API_KEY; SecretStr hides the value in logs and error messages
+    )
 
 
 settings = Settings()  # read everything once; other files import this object

@@ -1,13 +1,15 @@
 from collections.abc import Sequence
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from blasto.api.security import require_admin
 from blasto.crud import (
     application as crud,  # module alias: crud.list_applications, no name clash
 )
 from blasto.db import get_session
+from blasto.errors import ApplicationNotFound
 from blasto.models import Application
 from blasto.schemas.application import ApplicationCreate, ApplicationPublic
 
@@ -17,6 +19,8 @@ SessionDep = Annotated[
     AsyncSession, Depends(get_session)
 ]  # FastAPI runs get_session and passes the session in
 
+AdminOnly = [Depends(require_admin)]
+
 
 @router.post("", status_code=201, response_model=ApplicationPublic)
 async def create_application(
@@ -25,21 +29,25 @@ async def create_application(
     return await crud.create_application(session, new_application)
 
 
-@router.get("/{application_id}", response_model=ApplicationPublic)
+@router.get(
+    "/{application_id}", response_model=ApplicationPublic, dependencies=AdminOnly
+)
 async def get_application(session: SessionDep, application_id: int) -> Application:
     application = await crud.get_application(session, application_id)
     if application is None:
-        raise HTTPException(status_code=404, detail="Application not found")
+        raise ApplicationNotFound(application_id)
 
     return application
 
 
-@router.get("", response_model=list[ApplicationPublic])
+@router.get("", response_model=list[ApplicationPublic], dependencies=AdminOnly)
 async def list_applications(session: SessionDep) -> Sequence[Application]:
     return await crud.list_applications(session)
 
 
-@router.put("/{application_id}", response_model=ApplicationPublic)
+@router.put(
+    "/{application_id}", response_model=ApplicationPublic, dependencies=AdminOnly
+)
 async def update_application(
     session: SessionDep, application_id: int, updated_application: ApplicationCreate
 ) -> Application:
@@ -47,15 +55,17 @@ async def update_application(
         session, application_id, updated_application
     )
     if application is None:
-        raise HTTPException(status_code=404, detail="Application not found")
+        raise ApplicationNotFound(application_id)
 
     return application
 
 
-@router.delete("/{application_id}", response_model=ApplicationPublic)
+@router.delete(
+    "/{application_id}", response_model=ApplicationPublic, dependencies=AdminOnly
+)
 async def delete_application(session: SessionDep, application_id: int) -> Application:
     application = await crud.delete_application(session, application_id)
     if application is None:
-        raise HTTPException(status_code=404, detail="Application not found")
+        raise ApplicationNotFound(application_id)
 
     return application
