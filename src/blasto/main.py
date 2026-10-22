@@ -64,6 +64,7 @@ async def index() -> str:
       <body>
         <h1>blasto</h1>
         <p>Backend for a driving school's website, in development.</p>
+        <p>Version B: rollback test.</p>
         <p>Code: <a href="https://github.com/mtmsvc/blasto">github.com/mtmsvc/blasto</a></p>
       </body>
     </html>"""
