@@ -93,7 +93,7 @@ docker compose ps
 
 **Limit: rollback does not undo migrations.** It changes the code, not the database. If the newer version ran a migration, the older code runs against the newer schema; undoing a migration is a separate, deliberate step (`alembic downgrade`).
 
-**Tested:** rolled back from `<SHA of B>` (index page changed) to `<SHA of A>`; the previous page was back after `docker compose up -d`.
+**Tested:** rolled back from `f6428f06db8490a21134ddddaa90fb78bbb56fe7` (index page changed) to `66e15d6752a295f695c9ebec9187f3f5bed07b03`; the previous page was back after `docker compose up -d`.
 
 ## Why async matters here
 FastAPI runs `async def` endpoints on a single event loop: while one request waits for the database, the loop serves other requests. A **blocking** call inside `async def` - a synchronous database driver, `time.sleep`, a sync HTTP client - stops the whole loop, and every request on the server freezes until it returns.
