@@ -1,0 +1,14 @@
+services:
+  db:                                    # the service name; inside Compose, Postgres is reachable as "db"
+    image: postgres:17                   # official Postgres image, version 17
+    environment:                         # settings the Postgres image reads on first start
+      POSTGRES_USER: blasto              # database user to create
+      POSTGRES_PASSWORD: blasto          # its password; fine locally, never on the server
+      POSTGRES_DB: blasto                # database to create
+    ports:
+      - "127.0.0.1:5432:5432"            # reachable from your laptop only, on Postgres's standard port
+    volumes:
+      - db_data:/var/lib/postgresql/data # where Postgres stores its files; kept in a named volume
+
+volumes:
+  db_data:                               # declare the named volume, so the data survives restarts

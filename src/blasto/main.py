@@ -8,11 +8,12 @@ from fastapi import (
     Request,
     Response,
 )
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
+from blasto.api.routes import applications
 from blasto.config import settings
+from blasto.errors import BlastoError
 from blasto.logging_setup import setup_logging
-from blasto.utils import capitalize_name
 
 setup_logging(settings.log_level)  # configure logging before anything logs
 logger = logging.getLogger(
@@ -21,6 +22,18 @@ logger = logging.getLogger(
 
 
 app = FastAPI()
+
+app.include_router(applications.router)
+
+
+@app.exception_handler(
+    BlastoError
+)  # any BlastoError (or subclass) raised in an endpoint lands here
+async def blasto_error_handler(request: Request, exc: BlastoError) -> JSONResponse:
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"error": exc.code, "message": exc.message},
+    )
 
 
 @app.middleware("http")  # run this function around every HTTP request
@@ -59,12 +72,6 @@ async def index() -> str:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
-
-
-@app.get("/hello/{name}")
-def hello(name: str) -> dict[str, str]:
-    name = capitalize_name(name)
-    return {"message": f"Hello, {name}!"}
 
 
 if __name__ == "__main__":
